@@ -1,12 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import {
-  BadgeCheck,
-  ListTodo,
-  Play,
-  ShieldCheck,
-  Sparkles,
-  Square,
-} from "lucide-react";
+import { ListTodo, Play, ShieldCheck, Sparkles, Square } from "lucide-react";
 
 import type { HrNodeType } from "./types";
 

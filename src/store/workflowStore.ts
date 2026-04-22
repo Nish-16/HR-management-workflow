@@ -45,6 +45,14 @@ type HistorySnapshot = {
   nextNodeId: number;
 };
 
+export type ExecutedWorkflowRun = {
+  id: string;
+  executedAt: string;
+  nodeCount: number;
+  edgeCount: number;
+  executionLog: string[];
+};
+
 interface WorkflowState {
   nodes: WorkflowNode[];
   edges: WorkflowEdge[];
@@ -52,6 +60,7 @@ interface WorkflowState {
   selectedNodeIds: string[];
   isSimulating: boolean;
   executionLog: string[];
+  executedWorkflows: ExecutedWorkflowRun[];
   validationErrors: string[];
   history: HistorySnapshot[];
   historyIndex: number;
@@ -121,6 +130,7 @@ export const useWorkflowStore = create<WorkflowStore>()(
         selectedNodeIds: [],
         isSimulating: false,
         executionLog: [],
+        executedWorkflows: [],
         validationErrors: [],
         history: [{ nodes: defaultNodes, edges: [], nextNodeId: 2 }],
         historyIndex: 0,
@@ -310,6 +320,7 @@ export const useWorkflowStore = create<WorkflowStore>()(
             nextNodeId: 1,
             selectedNodeIds: [],
             executionLog: [],
+            executedWorkflows: [],
             validationErrors: [],
             history: [{ nodes: [], edges: [], nextNodeId: 1 }],
             historyIndex: 0,
@@ -373,7 +384,19 @@ export const useWorkflowStore = create<WorkflowStore>()(
 
           try {
             const result = await simulateWorkflow({ workflow: serialized });
-            set({ executionLog: result.executionLog });
+            set((s) => ({
+              executionLog: result.executionLog,
+              executedWorkflows: [
+                {
+                  id: `${Date.now()}`,
+                  executedAt: new Date().toISOString(),
+                  nodeCount: nodes.length,
+                  edgeCount: edges.length,
+                  executionLog: result.executionLog,
+                },
+                ...s.executedWorkflows,
+              ].slice(0, 50),
+            }));
           } catch {
             set({
               executionLog: [],
@@ -391,6 +414,7 @@ export const useWorkflowStore = create<WorkflowStore>()(
         nodes: s.nodes,
         edges: s.edges,
         nextNodeId: s.nextNodeId,
+        executedWorkflows: s.executedWorkflows,
       }),
     },
   ),
