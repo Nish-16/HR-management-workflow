@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import ReactFlow, {
   Background,
   Controls,
@@ -17,6 +18,10 @@ import { nodeLabels, type HrNodeType } from "./features/workflow-editor/types";
 import { WorkflowSimulationPanel } from "./features/simulation/components/WorkflowSimulationPanel";
 import { nodeVisuals } from "./features/workflow-editor/nodeTypeConfig";
 import { useWorkflowStore } from "./store/workflowStore";
+import {
+  registerKeyboardShortcuts,
+  SHORTCUTS_REFERENCE,
+} from "./utils/keyboardShortcuts";
 
 import "reactflow/dist/style.css";
 
@@ -40,7 +45,7 @@ function App() {
   const {
     nodes,
     edges,
-    selectedNodeId,
+    selectedNodeIds,
     isSimulating,
     executionLog,
     validationErrors,
@@ -49,15 +54,55 @@ function App() {
     onConnect,
     addNode,
     deleteNode,
+    deleteSelectedNodes,
     updateNodeConfig,
     setSelectedNodeId,
+    toggleNodeSelection,
     clearCanvas,
     exportWorkflow,
     runSimulation,
+    undo,
+    redo,
   } = useWorkflowStore();
 
   const { actions, isLoading, error } = useAutomationActions();
-  const selectedNode = nodes.find((n) => n.id === selectedNodeId) ?? null;
+  const selectedNode =
+    selectedNodeIds.length > 0
+      ? (nodes.find((n) => n.id === selectedNodeIds[0]) ?? null)
+      : null;
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const cleanup = registerKeyboardShortcuts(
+      {
+        onUndo: undo,
+        onRedo: redo,
+        onDelete: deleteSelectedNodes,
+        onDuplicate: () => {
+          if (selectedNode) {
+            addNode(selectedNode.type as HrNodeType);
+          }
+        },
+        onExport: exportWorkflow,
+        onClearCanvas: clearCanvas,
+        onRunSimulation: () => void runSimulation(),
+      },
+      selectedNodeIds[0] ?? null,
+      selectedNode,
+    );
+
+    return cleanup;
+  }, [
+    selectedNodeIds,
+    selectedNode,
+    undo,
+    redo,
+    deleteSelectedNodes,
+    addNode,
+    exportWorkflow,
+    clearCanvas,
+    runSimulation,
+  ]);
 
   return (
     <div className="grid min-h-svh w-full grid-rows-[auto_1fr_auto] bg-slate-100 lg:grid-cols-[16rem_1fr_20rem] lg:grid-rows-1">
@@ -109,6 +154,22 @@ function App() {
             </span>
           </button>
         </div>
+
+        <div className="mt-4 border-t border-slate-100 pt-4">
+          <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+            Shortcuts
+          </h3>
+          <ul className="space-y-1 text-xs text-slate-600">
+            {SHORTCUTS_REFERENCE.map((shortcut) => (
+              <li key={shortcut.keys}>
+                <kbd className="rounded bg-slate-100 px-1.5 py-0.5">
+                  {shortcut.keys}
+                </kbd>{" "}
+                {shortcut.action}
+              </li>
+            ))}
+          </ul>
+        </div>
       </aside>
 
       <div className="h-[55svh] w-full lg:h-svh">
@@ -119,7 +180,9 @@ function App() {
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
-          onNodeClick={(_, node) => setSelectedNodeId(node.id)}
+          onNodeClick={(event, node) =>
+            toggleNodeSelection(node.id, event.shiftKey)
+          }
           onPaneClick={() => setSelectedNodeId(null)}
           fitView
           className="bg-linear-to-br from-slate-50 via-slate-100 to-blue-50"
