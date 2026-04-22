@@ -2,16 +2,16 @@ import { useEffect } from "react";
 import ReactFlow, { Background, Controls, MiniMap } from "reactflow";
 import { FileDown, Trash2 } from "lucide-react";
 
-import { useAutomationActions } from "../../../hooks/useAutomationActions";
+import { useAutomationActions } from "../../workflow-editor/hooks/useAutomationActions";
 import { WorkflowSimulationPanel } from "../../simulation/components/WorkflowSimulationPanel";
 import { nodeVisuals } from "../../workflow-editor/nodeTypeConfig";
 import { NodeConfigPanel } from "../../workflow-editor/components/NodeConfigPanel";
 import { nodeLabels, type HrNodeType } from "../../workflow-editor/types";
-import { useWorkflowStore } from "../../../store/workflowStore";
+import { useWorkflowStore } from "../../workflow-editor/store/workflowStore";
 import {
   registerKeyboardShortcuts,
   SHORTCUTS_REFERENCE,
-} from "../../../utils/keyboardShortcuts";
+} from "../../../shared/utils/keyboardShortcuts";
 import { CanvasTabs } from "../components/CanvasTabs";
 import { nodeDefinitions, nodeTypes } from "../config/canvasConfig";
 

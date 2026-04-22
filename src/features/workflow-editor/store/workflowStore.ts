@@ -11,18 +11,18 @@ import {
   type NodeChange,
 } from "reactflow";
 
-import { simulateWorkflow } from "../api/workflowSimulationApi";
+import { simulateWorkflow } from "../../simulation/api/workflowSimulationApi";
 import {
   serializeWorkflowGraph,
   validateWorkflowGraph,
-} from "../features/simulation/services/workflowSimulation";
+} from "../../simulation/services/workflowSimulation";
 import {
   getDefaultConfigForType,
   nodeLabels,
   type HrNodeType,
   type NodeConfigByType,
   type WorkflowNodeData,
-} from "../features/workflow-editor/types";
+} from "../types";
 
 export type WorkflowNode = Node<WorkflowNodeData, HrNodeType>;
 export type WorkflowEdge = Edge;
@@ -67,12 +67,10 @@ interface WorkflowState {
 }
 
 interface WorkflowActions {
-  // React Flow handlers
   onNodesChange: (changes: NodeChange[]) => void;
   onEdgesChange: (changes: EdgeChange[]) => void;
   onConnect: (connection: Connection) => void;
 
-  // Node management
   addNode: (type: HrNodeType) => void;
   deleteNode: (nodeId: string) => void;
   deleteSelectedNodes: () => void;
@@ -84,17 +82,14 @@ interface WorkflowActions {
   setSelectedNodeId: (id: string | null) => void;
   toggleNodeSelection: (nodeId: string, isMultiSelect: boolean) => void;
 
-  // Canvas
   clearCanvas: () => void;
   startBlankWorkflow: () => void;
   exportWorkflow: () => void;
 
-  // History
   saveToHistory: () => void;
   undo: () => void;
   redo: () => void;
 
-  // Simulation
   runSimulation: () => Promise<void>;
 }
 
@@ -112,7 +107,6 @@ export const useWorkflowStore = create<WorkflowStore>()(
           };
           const newHistory = s.history.slice(0, s.historyIndex + 1);
           newHistory.push(snapshot);
-          // Keep history limited to 50 snapshots
           if (newHistory.length > 50) {
             newHistory.shift();
           }
@@ -168,7 +162,6 @@ export const useWorkflowStore = create<WorkflowStore>()(
               nextNodeId: s.nextNodeId + 1,
               selectedNodeIds: [id],
             };
-            // Save to history after adding node
             const snapshot: HistorySnapshot = {
               nodes: newState.nodes,
               edges: s.edges,
@@ -195,7 +188,6 @@ export const useWorkflowStore = create<WorkflowStore>()(
               ),
               selectedNodeIds: s.selectedNodeIds.filter((id) => id !== nodeId),
             };
-            // Save to history after deleting node
             const snapshot: HistorySnapshot = {
               nodes: newState.nodes,
               edges: newState.edges,
@@ -227,7 +219,6 @@ export const useWorkflowStore = create<WorkflowStore>()(
                 return { ...node, data: { label: title, config } };
               }),
             };
-            // Save to history after updating config
             const snapshot: HistorySnapshot = {
               nodes: newState.nodes,
               edges: s.edges,
@@ -271,7 +262,6 @@ export const useWorkflowStore = create<WorkflowStore>()(
             let newNodes = s.nodes;
             let newEdges = s.edges;
 
-            // Delete all selected nodes
             for (const nodeId of s.selectedNodeIds) {
               newNodes = newNodes.filter((n) => n.id !== nodeId);
               newEdges = newEdges.filter(
@@ -285,7 +275,6 @@ export const useWorkflowStore = create<WorkflowStore>()(
               selectedNodeIds: [],
             };
 
-            // Save to history
             const snapshot: HistorySnapshot = {
               nodes: newState.nodes,
               edges: newState.edges,

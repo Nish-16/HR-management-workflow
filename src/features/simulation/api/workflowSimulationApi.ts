@@ -2,13 +2,13 @@ import type {
   SerializedWorkflow,
   WorkflowNodeSnapshot,
   WorkflowEdgeSnapshot,
-} from "../features/simulation/services/workflowSimulation";
+} from "../services/workflowSimulation";
 import type {
   ApprovalNodeConfig,
   AutomatedStepNodeConfig,
   EndNodeConfig,
   TaskNodeConfig,
-} from "../features/workflow-editor/types";
+} from "../../workflow-editor/types";
 
 export type SimulateWorkflowRequest = {
   workflow: SerializedWorkflow;

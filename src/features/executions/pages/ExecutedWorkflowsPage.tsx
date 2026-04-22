@@ -1,5 +1,5 @@
 import { CanvasTabs } from "../../canvas/components/CanvasTabs";
-import { useWorkflowStore } from "../../../store/workflowStore";
+import { useWorkflowStore } from "../../workflow-editor/store/workflowStore";
 
 export function ExecutedWorkflowsPage() {
   const { executedWorkflows } = useWorkflowStore();

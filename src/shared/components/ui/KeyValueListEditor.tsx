@@ -1,4 +1,4 @@
-import type { KeyValuePair } from "../../features/workflow-editor/types";
+import type { KeyValuePair } from "../../../features/workflow-editor/types";
 
 type KeyValueListEditorProps = {
   label: string;

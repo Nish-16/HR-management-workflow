@@ -1,4 +1,4 @@
-import type { EndNodeConfig } from "../types";
+import type { EndNodeConfig } from "../../types";
 
 type EndNodeFormProps = {
   config: EndNodeConfig;

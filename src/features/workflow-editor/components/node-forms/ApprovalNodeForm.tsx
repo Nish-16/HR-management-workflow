@@ -1,4 +1,4 @@
-import type { ApprovalNodeConfig } from "../types";
+import type { ApprovalNodeConfig } from "../../types";
 
 type ApprovalNodeFormProps = {
   config: ApprovalNodeConfig;

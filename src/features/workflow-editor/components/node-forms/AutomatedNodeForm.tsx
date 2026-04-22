@@ -1,5 +1,5 @@
-import type { AutomationAction } from "../../../api/automationApi";
-import type { AutomatedStepNodeConfig } from "../types";
+import type { AutomationAction } from "../../api/automationApi";
+import type { AutomatedStepNodeConfig } from "../../types";
 
 type AutomatedNodeFormProps = {
   config: AutomatedStepNodeConfig;

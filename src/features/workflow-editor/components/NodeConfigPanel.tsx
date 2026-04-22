@@ -1,13 +1,13 @@
 import type { Node } from "reactflow";
 import { Trash2, X } from "lucide-react";
 
-import type { AutomationAction } from "../../../api/automationApi";
+import type { AutomationAction } from "../api/automationApi";
 import type { HrNodeType, NodeConfigByType, WorkflowNodeData } from "../types";
-import { ApprovalNodeForm } from "../config-forms/ApprovalNodeForm";
-import { AutomatedNodeForm } from "../config-forms/AutomatedNodeForm";
-import { EndNodeForm } from "../config-forms/EndNodeForm";
-import { StartNodeForm } from "../config-forms/StartNodeForm";
-import { TaskNodeForm } from "../config-forms/TaskNodeForm";
+import { ApprovalNodeForm } from "./node-forms/ApprovalNodeForm";
+import { AutomatedNodeForm } from "./node-forms/AutomatedNodeForm";
+import { EndNodeForm } from "./node-forms/EndNodeForm";
+import { StartNodeForm } from "./node-forms/StartNodeForm";
+import { TaskNodeForm } from "./node-forms/TaskNodeForm";
 
 type WorkflowNode = Node<WorkflowNodeData, HrNodeType>;
 

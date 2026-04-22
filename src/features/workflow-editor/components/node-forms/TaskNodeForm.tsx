@@ -1,5 +1,5 @@
-import { KeyValueListEditor } from "../../../components/ui/KeyValueListEditor";
-import type { TaskNodeConfig } from "../types";
+import { KeyValueListEditor } from "../../../../shared/components/ui/KeyValueListEditor";
+import type { TaskNodeConfig } from "../../types";
 
 type TaskNodeFormProps = {
   config: TaskNodeConfig;

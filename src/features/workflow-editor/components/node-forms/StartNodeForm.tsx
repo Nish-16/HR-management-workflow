@@ -1,5 +1,5 @@
-import type { StartNodeConfig } from "../types";
-import { KeyValueListEditor } from "../../../components/ui/KeyValueListEditor";
+import type { StartNodeConfig } from "../../types";
+import { KeyValueListEditor } from "../../../../shared/components/ui/KeyValueListEditor";
 
 type StartNodeFormProps = {
   config: StartNodeConfig;
