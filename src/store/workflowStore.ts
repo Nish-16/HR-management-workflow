@@ -77,6 +77,7 @@ interface WorkflowActions {
 
   // Canvas
   clearCanvas: () => void;
+  startBlankWorkflow: () => void;
   exportWorkflow: () => void;
 
   // History
@@ -300,6 +301,18 @@ export const useWorkflowStore = create<WorkflowStore>()(
             selectedNodeIds: [],
             executionLog: [],
             validationErrors: [],
+          }),
+
+        startBlankWorkflow: () =>
+          set({
+            nodes: [],
+            edges: [],
+            nextNodeId: 1,
+            selectedNodeIds: [],
+            executionLog: [],
+            validationErrors: [],
+            history: [{ nodes: [], edges: [], nextNodeId: 1 }],
+            historyIndex: 0,
           }),
 
         exportWorkflow: () => {

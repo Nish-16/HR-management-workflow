@@ -1,11 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ReactFlow, {
   Background,
   Controls,
   MiniMap,
   type NodeTypes,
 } from "reactflow";
-import { FileDown, Trash2 } from "lucide-react";
+import { FileDown, Plus, Trash2 } from "lucide-react";
 
 import { useAutomationActions } from "./hooks/useAutomationActions";
 import { NodeConfigPanel } from "./features/workflow-editor/components/NodeConfigPanel";
@@ -42,6 +42,8 @@ const nodeDefinitions: HrNodeType[] = [
 ];
 
 function App() {
+  const [isHomeScreen, setIsHomeScreen] = useState(true);
+
   const {
     nodes,
     edges,
@@ -59,6 +61,7 @@ function App() {
     setSelectedNodeId,
     toggleNodeSelection,
     clearCanvas,
+    startBlankWorkflow,
     exportWorkflow,
     runSimulation,
     undo,
@@ -73,6 +76,10 @@ function App() {
 
   // Keyboard shortcuts
   useEffect(() => {
+    if (isHomeScreen) {
+      return;
+    }
+
     const cleanup = registerKeyboardShortcuts(
       {
         onUndo: undo,
@@ -102,7 +109,41 @@ function App() {
     exportWorkflow,
     clearCanvas,
     runSimulation,
+    isHomeScreen,
   ]);
+
+  if (isHomeScreen) {
+    return (
+      <main className="flex min-h-svh items-center justify-center bg-linear-to-br from-slate-50 via-white to-cyan-50 p-6">
+        <section className="w-full max-w-2xl rounded-3xl border border-slate-200 bg-white p-10 shadow-xl shadow-slate-300/30">
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-700">
+            HR Workflow Designer
+          </p>
+          <h1 className="mt-3 text-4xl font-semibold text-slate-900">
+            Build your process from a blank canvas
+          </h1>
+          <p className="mt-4 max-w-xl text-base text-slate-600">
+            Start with an empty workflow and add only the steps you need for
+            your team's HR automation.
+          </p>
+
+          <div className="mt-8 flex flex-wrap gap-3">
+            <button
+              type="button"
+              onClick={() => {
+                startBlankWorkflow();
+                setIsHomeScreen(false);
+              }}
+              className="inline-flex items-center gap-2 rounded-xl bg-cyan-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-cyan-200 transition hover:bg-cyan-700"
+            >
+              <Plus className="h-4 w-4" />
+              <span>New Workflow</span>
+            </button>
+          </div>
+        </section>
+      </main>
+    );
+  }
 
   return (
     <div className="grid min-h-svh w-full grid-rows-[auto_1fr_auto] bg-slate-100 lg:grid-cols-[16rem_1fr_20rem] lg:grid-rows-1">
