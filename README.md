@@ -2,7 +2,7 @@
 
 A visual workflow builder for HR processes — onboarding, leave approvals, document verification — built with React, TypeScript, and React Flow.
 
-![HR Workflow Designer](https://placeholder.com/screenshot)
+[HR Workflow Designer]
 
 ---
 
